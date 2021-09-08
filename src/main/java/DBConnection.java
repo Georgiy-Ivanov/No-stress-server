@@ -93,13 +93,11 @@ public class DBConnection {
             preparedStatement.setString(1, login);
             int rows = preparedStatement.executeUpdate();
             if (rows == 1) {
-                System.out.println("true");
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("false");
         return false;
     }
     public boolean deleteUser(String email){
