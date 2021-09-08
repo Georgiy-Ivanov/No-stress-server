@@ -13,7 +13,6 @@ public class DBConnection {
 
     public DBConnection (String pass){
         PASSWORD = pass;
-        System.out.println(PASSWORD);
         url="jdbc:postgresql://"+HOST+"/"+DBNAME+"?user="+USERNAME+"&password="+PASSWORD;
         try {
             connection = DriverManager.getConnection(url, USERNAME, PASSWORD);
@@ -75,7 +74,7 @@ public class DBConnection {
             String SQL = "Insert into users_info (email, date, name, phone) values (?, ?, ?, ?);";
             preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, email);
-            preparedStatement.setString(2, date);
+            preparedStatement.setDate(2, Date.valueOf(date));
             preparedStatement.setString(3, name);
             preparedStatement.setString(4, phone);
             int rows = preparedStatement.executeUpdate();
@@ -87,5 +86,36 @@ public class DBConnection {
         }
         return false;
     }
+    public boolean deleteUserInfo(String login){
+        try {
+            String SQL = "delete from users_info where email=?;";
+            preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, login);
+            int rows = preparedStatement.executeUpdate();
+            if (rows == 1) {
+                System.out.println("true");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("false");
+        return false;
+    }
+    public boolean deleteUser(String email){
+        try {
+            String SQL = "delete from users where login=?;";
+            preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, email);
+            int rows = preparedStatement.executeUpdate();
+            if (rows == 1) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
 

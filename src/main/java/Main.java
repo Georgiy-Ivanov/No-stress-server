@@ -16,11 +16,9 @@ public class Main{
     }
 
     public void run(){
-        System.out.println("Введите пароль от БД");
-        sc = new Scanner(System.in);
-        String pass = sc.nextLine();
+        String pass = "000000";
+        System.out.println("waiting for clients");
         while (true) {
-            System.out.println("waiting for clients");
             try {
                 Socket socket = server.accept();
                 System.out.println("New client connected!");

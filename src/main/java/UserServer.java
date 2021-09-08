@@ -18,11 +18,10 @@ public final class UserServer implements Runnable{
 
     @Override
     public void run() {
-        String request;
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             Thread.sleep(500);
-            request = reader.readLine();
+            String request = reader.readLine();
             System.out.println("Request: " + request);
             writer.write(receivedMsg(request));
             System.out.println("Отправили клиенту");
@@ -34,32 +33,32 @@ public final class UserServer implements Runnable{
     }
 
     private String receivedMsg(String msg) {
-        String q = "2";
         String[] massStrings;
         try {
             massStrings = msg.split(";");
             if (massStrings[0].equals("reg")) {
                 if (dbConnection.registration(massStrings[1], massStrings[2])) {
-                    q = "1";
+                    return "1";
                 }
             }
             if (massStrings[0].equals("log")) {
                 if (dbConnection.loginIn(massStrings[1], massStrings[2])){
-                    q = "1";
+                    return "1";
                 }
             }
             if (massStrings[0].equals("get")) {
-                q = dbConnection.getUserInfo(massStrings[1]);
+                return dbConnection.getUserInfo(massStrings[1]);
             }
             if (massStrings[0].equals("create")) {
+                System.out.println(massStrings[2]);
                 if (dbConnection.createProfile(massStrings[1], massStrings[2], massStrings[3], massStrings[4])) {
-                    q = "1";
+                    return "1";
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return q;
+        return "2";
     }
 
 }
